@@ -2,53 +2,30 @@ import Button from "./Button";
 import styles from "./App.module.css";
 import { useState, useEffect } from "react";
 
-function Hello() {
-  useEffect(() => {
-    console.log("created!");
-    return function () {
-      console.log("destroyed");
-    };
-  }, []);
-  return <h1>Hello</h1>;
-}
-
 function App() {
-  const [counter, setValue] = useState(0);
-  const [keyWord, setkeyWord] = useState("");
-  const onChange = (event) => setkeyWord(event.target.value);
-  const onClick = () => setValue((prev) => prev + 1);
-  //console.log("i run all time");
-  useEffect(() => {
-    console.log("i run once");
-  }, []);
-  useEffect(() => {
-    if (keyWord !== "" && keyWord.length > 4) {
-      console.log("keyword change runs me", keyWord);
-      //setkeyWord("lalalal");
+  const [toDo, setToDo] = useState("");
+  const [toDos, setToDos] = useState([]);
+  const onChange = (event) => setToDo(event.target.value);
+  const onSubmit = (event) => {
+    event.preventDefault();
+    if (toDo === "") {
+      return;
     }
-  }, [keyWord]);
-  //
-  const [showing, setShowing] = useState(false);
-  const onShow = () => setShowing((prev) => !prev);
-
+    setToDos((currentArray) => [toDo, ...currentArray]);
+    setToDo("");
+  };
   return (
     <div>
-      <div>
+      <h1>My To Dos :{toDos.length}</h1>
+      <form onSubmit={onSubmit}>
         <input
-          value={keyWord}
           onChange={onChange}
+          value={"todo"}
           type="text"
-          placeholder="search here"
+          placeholder="Write it"
         />
-        <h1 className={styles.title}>Welcome!</h1>
-        <h3>{counter}</h3>
-        <button onClick={onClick}>click me</button>
-        <Button text={"gochujang"} />
-      </div>
-      <div>
-        <button onClick={onShow}>{showing ? "hide" : "show"}</button>
-        {showing ? <Hello /> : null}
-      </div>
+        <button>Add To Do</button>
+      </form>
     </div>
   );
 }
